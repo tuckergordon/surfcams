@@ -34,5 +34,3 @@ export async function fetchTides({
     console.error("Error fetching tides:", error);
   }
 }
-
-// const tides = fetchTides();

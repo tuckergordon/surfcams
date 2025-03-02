@@ -66,8 +66,7 @@ function tideChart(
           return formattedTime;
         })
     )
-    .call((g) => g.select(".domain").remove()) // Remove the axis line
-
+    .call((g) => g.select(".domain").remove()); // Remove the axis line
 
   // High and Low tide marks
   const highLowGroup = svg.append("g").attr("class", "group-high-low");
