@@ -1,0 +1,61 @@
+html {
+  background: linear-gradient(0deg, #cbddfebf, #a3d1cebf);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body {
+  color: #26554a;
+  font-family: "Quicksand", serif;
+  padding: 16px;
+}
+
+h1,
+h2 {
+  font-family: "Lobster", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+.cam-container {
+  width: 100%;
+  display: inline-block;
+}
+
+iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.cam-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .cam-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+footer {
+  border-top: 1px solid #333;
+  margin-top: 48px;
+  padding-top: 16px;
+  text-align: center;
+}
+
+a {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: none;
+}
