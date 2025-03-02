@@ -25,10 +25,11 @@
     />
     <meta property="og:url" content="http://surfcams.tuckergordon.dev" />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#a3d1ce">
+    <meta name="theme-color" content="#a3d1ce" />
 
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="tide-chart/tide-chart.css" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -42,6 +43,7 @@
   <body>
     <header>
       <h1>Maine Surf Cams</h1>
+      <svg class="tide-chart" width="350" height="100"></svg>
     </header>
 
     <main class="cam-grid">
@@ -106,5 +108,7 @@
         (or just text me if you have my number)
       </p>
     </footer>
+
+    <script src="tide-chart/tide-chart.js" type="module"></script>
   </body>
 </html>
