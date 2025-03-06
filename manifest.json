@@ -2,9 +2,8 @@
   "name": "Maine Surf Cams",
   "short_name": "ME Surf Cams",
   "start_url": "/",
-  "display": "standalone",
-  "background_color": "#cbddfebf",
-  "theme_color": "#cbddfebf",
+  "background_color": "#a3d1cebf",
+  "theme_color": "#a3d1cebf",
   "icons": [
     {
       "src": "icons/mobile.png",
