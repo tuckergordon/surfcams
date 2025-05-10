@@ -1,5 +1,6 @@
-<script>
-  import TideChart from "./lib/components/tide-chart/TideChart.svelte";
+<script lang="ts">
+  import TideChart from './lib/components/tide-chart/TideChart.svelte';
+  import streams from './assets/streams.json' with { type: 'json' };
 </script>
 
 <header>
@@ -8,66 +9,29 @@
 </header>
 
 <main class="cam-grid">
-  <div class="cam-container" id="scarb">
-    <h2>Higgins Beach</h2>
-    <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube.com/embed/9w7shRiOY60?si=nBwfSWTvfVU1-uKs&autoplay=1&mute=1"
-      title="Higgins Beach surf cam"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-    ></iframe>
-  </div>
-  <div class="cam-container" id="pine-point">
-    <h2>Pine Point Beach</h2>
-    <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube.com/embed/JffKRIrpA1o?si=IzCZnovrnp-v3F-v&autoplay=1&mute=1"
-      title="Pine Point surf cam"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-    ></iframe>
-  </div>
-  <div class="cam-container" id="oob">
-    <h2>Old Orchard Beach</h2>
-    <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube.com/embed/AB0Gmtrk9Pc?si=9OzEOAqy9c8xjLHb&autoplay=1&mute=1"
-      title="Old Orchard Beach surf cam"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-    ></iframe>
-  </div>
-  <div class="cam-container" id="scarb">
-    <h2>Scarborough Beach</h2>
-    <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube.com/embed/ovbFXmkui38?si=X1AcJb3Uv60ZWLQy&autoplay=1&mute=1"
-      title="Scarborough beach surf cam"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-    ></iframe>
-  </div>
-  <div class="cam-container" id="kennebunk">
-    <h2>Kennebunk Beach</h2>
-    <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube.com/embed/m6DMs26S1e8?si=ytpdUB5hTtEO1MCt&autoplay=1&mute=1"
-      title="Kennebunk beach surf cam"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-    ></iframe>
-  </div>
+  {#each streams as stream}
+    <div class="cam-container" id={stream.id}>
+      <h2>{stream.name}</h2>
+      {#if stream.videoId}
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/{stream.videoId}?autoplay=1&mute=1"
+          title="{stream.name} surf cam"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+      {:else}
+        <div
+          class="offline-message"
+          style="width: 100%; height: 315px; display: grid; place-items: center; background: #dddddd99; border-radius: 8px;"
+        >
+          <p>This camera is currently offline</p>
+        </div>
+      {/if}
+    </div>
+  {/each}
 </main>
 
 <footer>
