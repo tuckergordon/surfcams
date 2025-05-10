@@ -1,10 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
   workflow_run:
+    # Triggered by update streams workflow instead of just pushes to main so that
+    # we can ensure the streams are up to date before deploying.
     workflows: ['Update streams']
     types:
       - completed
