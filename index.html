@@ -1,130 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="manifest" href="/manifest.json" />
-
+    
     <!-- SEO -->
-    <meta
-      name="description"
-      content="Live surf cams for beaches around Portland, ME"
-    />
-    <meta
-      name="keywords"
-      content="surf cam, cams, maine, Scarborough Beach, Pine Point, Old Orchard Beach, live surf"
-    />
-
+    <meta name="description" content="Live surf cams for beaches around Portland, ME" />
+    <meta name="keywords" content="surf cam, cams, maine, Scarborough Beach, Pine Point, Old Orchard Beach, live surf" />
+    
     <title>Maine Surf Cams</title>
     <link rel="icon" href="/icons/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/icons/mobile.png" type="image/png" />
-
+    
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Maine Surf Cams" />
-    <meta
-      property="og:description"
-      content="Live surf cams for beaches around Portland, ME"
-    />
+    <meta property="og:description" content="Live surf cams for beaches around Portland, ME" />
     <meta property="og:url" content="http://surfcams.tuckergordon.dev" />
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#a3d1ce" />
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="tide-chart/tide-chart.css" />
-
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lobster&family=Quicksand:wght@300..700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Quicksand:wght@300..700&display=swap" rel="stylesheet" />
   </head>
-
   <body>
-    <header>
-      <h1>Maine Surf Cams</h1>
-      <svg class="tide-chart" width="350" height="100"></svg>
-    </header>
-
-    <main class="cam-grid">
-      <div class="cam-container" id="scarb">
-        <h2>Higgins Beach</h2>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/9w7shRiOY60?si=nBwfSWTvfVU1-uKs&autoplay=1&mute=1"
-          title="Higgins Beach surf cam"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <div class="cam-container" id="pine-point">
-        <h2>Pine Point Beach</h2>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/JffKRIrpA1o?si=IzCZnovrnp-v3F-v&autoplay=1&mute=1"
-          title="Pine Point surf cam"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <div class="cam-container" id="oob">
-        <h2>Old Orchard Beach</h2>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/AB0Gmtrk9Pc?si=9OzEOAqy9c8xjLHb&autoplay=1&mute=1"
-          title="Old Orchard Beach surf cam"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <div class="cam-container" id="scarb">
-        <h2>Scarborough Beach</h2>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/ovbFXmkui38?si=X1AcJb3Uv60ZWLQy&autoplay=1&mute=1"
-          title="Scarborough beach surf cam"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <div class="cam-container" id="kennebunk">
-        <h2>Kennebunk Beach</h2>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/m6DMs26S1e8?si=ytpdUB5hTtEO1MCt&autoplay=1&mute=1"
-          title="Kennebunk beach surf cam"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-        ></iframe>
-      </div>
-    </main>
-
-    <footer>
-      <h4>Notice a cam is down? Got a new one to add to the site?</h4>
-      <p>
-        <a href="mailto:tucker.gordon18@gmail.com">✉️ Email me</a>
-        (or just text me if you have my number)
-      </p>
-      <p><a href="https://www.tuckergordon.dev/">tuckergordon.dev</a></p>
-    </footer>
-
-    <script src="tide-chart/tide-chart.js" type="module"></script>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
