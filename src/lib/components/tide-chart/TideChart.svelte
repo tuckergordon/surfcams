@@ -1,6 +1,7 @@
 <script lang="ts">
   import * as d3 from "d3";
   import { fetchTides } from "./tides";
+  import { onMount, onDestroy } from "svelte";
 
   interface TideData {
     time: string;
@@ -17,22 +18,31 @@
   }
 
   // Props
-  const { className = "", width = 800, height = 400 } = $props<{
-    className?: string;
-    width?: number;
-    height?: number;
-  }>();
+  export let className = "";
+  export let width = 800;
+  export let height = 400;
 
-  let tideData = $state<TideData[]>([]);
-  let scales = $state<{
+  let tideData: TideData[] = [];
+  let scales: {
     x: d3.ScaleTime<number, number>;
     y: d3.ScaleLinear<number, number>;
-  } | null>(null);
-  let line = $state<d3.Line<TideData> | null>(null);
-  let area = $state<d3.Area<TideData> | null>(null);
-  let currentTime = $state<Date>(new Date());
+  } | null = null;
+  let line: d3.Line<TideData> | null = null;
+  let area: d3.Area<TideData> | null = null;
+  let currentTime = new Date();
+  let timer: number;
 
-  $effect(() => {
+  // Load initial data
+  async function loadData() {
+    const data = await fetchTides();
+    if (data) {
+      tideData = data;
+      updateScalesAndGenerators();
+    }
+  }
+
+  // Update scales and generators when data changes
+  function updateScalesAndGenerators() {
     if (tideData.length > 0) {
       const margin: Margin = { top: 30, right: 25, bottom: 20, left: 25 };
       const parseTime = d3.timeParse("%I:%M %p");
@@ -74,21 +84,8 @@
         .y0(height - margin.bottom)
         .y1((d) => scales!.y(d.height))
         .curve(d3.curveCatmullRom);
-
-      // Update current time
-      currentTime = new Date();
     }
-  });
-
-  $effect(() => {
-    async function loadData() {
-      const data = await fetchTides();
-      if (data) {
-        tideData = data;
-      }
-    }
-    loadData();
-  });
+  }
 
   function formatTime(date: Date): string {
     const formatHour = d3.timeFormat("%-I%p");
@@ -98,6 +95,19 @@
     }
     return formattedTime;
   }
+
+  onMount(() => {
+    loadData();
+    timer = window.setInterval(() => {
+      currentTime = new Date();
+    }, 1000);
+  });
+
+  onDestroy(() => {
+    if (timer) {
+      clearInterval(timer);
+    }
+  });
 </script>
 
 <svg class="tide-chart {className}" {width} {height} viewBox="0 0 {width} {height}">
