@@ -2,6 +2,9 @@ name: Update Streams
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
   schedule:
     - cron: '0 5 * * *' # Automatic daily at midnight EST (05:00 UTC)
 
