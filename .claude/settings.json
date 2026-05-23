@@ -1,0 +1,11 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(ls -la \"/Users/tuckergordon/Desktop/Other Repos/surfcams\" && echo \"---OLD---\" && ls -la \"/Users/tuckergordon/Desktop/Other Repos/\" | grep -i surf)",
+			"Read(//Users/tuckergordon/Desktop/Other Repos/**)",
+			"mcp__svelte__list-sections",
+			"mcp__svelte__get-documentation",
+			"mcp__svelte__svelte-autofixer"
+		]
+	}
+}

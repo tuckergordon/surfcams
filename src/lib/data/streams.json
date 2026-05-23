@@ -1,0 +1,32 @@
+[
+	{
+		"id": "higgins",
+		"name": "Higgins Beach",
+		"channelId": "UCZ63kVFT7hf1K-Mx82MxFnQ",
+		"videoId": "pMRy37KA2P4"
+	},
+	{
+		"id": "scarb",
+		"name": "Scarborough Beach",
+		"channelId": "UCzu3l_vz2bu2xn4bOo3eF_g",
+		"videoId": "1X6oqGKHSZs"
+	},
+	{
+		"id": "oob",
+		"name": "Old Orchard Beach",
+		"channelId": "UCgKZLRv6-2iPbILfeOwrxAw",
+		"videoId": "HSQpqIWLViI"
+	},
+	{
+		"id": "pine-point",
+		"name": "Pine Point Beach",
+		"channelId": "UCqmAWyEj3X0WLSnrPv6E-uA",
+		"videoId": null
+	},
+	{
+		"id": "kennebunk",
+		"name": "Kennebunk Beach",
+		"channelId": "UC8gbWbcNNyb5-NIXvFklkOA",
+		"videoId": "MnBqd6bB4Jw"
+	}
+]
