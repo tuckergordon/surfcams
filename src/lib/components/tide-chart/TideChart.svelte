@@ -10,6 +10,8 @@
 		timeParse
 	} from 'd3';
 	import { onMount } from 'svelte';
+	import { Tween } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
 	import { fetchTides, type TideEntry } from './tides';
 
 	const parseTime = timeParse('%I:%M %p');
@@ -31,6 +33,10 @@
 
 	let tideData = $state<ParsedTide[]>([]);
 	let now = $state(new Date());
+
+	const baseline = $derived(height - margin.bottom);
+	const riseProgress = new Tween(0, { duration: 1100, easing: cubicOut });
+	const labelOpacity = new Tween(0, { duration: 500, easing: cubicOut });
 
 	const xScale = $derived.by(() => {
 		if (tideData.length === 0) return null;
@@ -80,6 +86,10 @@
 						return parsed ? { ...d, parsedTime: parsed } : null;
 					})
 					.filter((d): d is ParsedTide => d !== null);
+				riseProgress.target = 1;
+				setTimeout(() => {
+					labelOpacity.target = 1;
+				}, 600);
 			})
 			.catch((err) => {
 				console.error('Error fetching tides:', err);
@@ -101,54 +111,60 @@
 	aria-label="Tide chart for Portland, ME"
 >
 	{#if xScale && yScale && linePath && areaPath}
-		<path class="fill-[#4682b4]/30" d={areaPath} />
-		<path class="fill-none stroke-black stroke-2" d={linePath} />
-
-		<g transform="translate(0,{height - margin.bottom})">
-			{#each xScale.ticks(5) as tick (tick.getTime())}
-				<g transform="translate({xScale(tick)},0)">
-					<line y2="4" stroke="#777" />
-					<text y="16" text-anchor="middle" class="fill-surf-subtle text-[10px]"
-						>{formatHour(tick)}</text
-					>
-				</g>
-			{/each}
+		<g
+			transform="translate(0,{baseline}) scale(1,{riseProgress.current}) translate(0,{-baseline})"
+		>
+			<path class="fill-[#4682b4]/30" d={areaPath} />
+			<path class="fill-none stroke-black stroke-2" d={linePath} />
 		</g>
 
-		{#each highLowTides as tide (tide.parsedTime.getTime())}
-			<g>
-				<line
-					class="fill-none stroke-[#333] stroke-1 opacity-40"
-					x1={xScale(tide.parsedTime)}
-					x2={xScale(tide.parsedTime)}
-					y1={yScale(tide.height)}
-					y2={height - margin.bottom}
-				/>
-				<text
-					x={xScale(tide.parsedTime)}
-					y={yScale(tide.height) - 10}
-					text-anchor="middle"
-					class="fill-surf-muted text-[10px] font-semibold"
-				>
-					{tide.height}ft
-				</text>
-				<text
-					x={xScale(tide.parsedTime)}
-					y={yScale(tide.height) - 22}
-					text-anchor="middle"
-					class="fill-surf-muted text-[10px] font-bold"
-				>
-					{formatTime(tide.parsedTime)}
-				</text>
+		<g style="opacity: {labelOpacity.current};">
+			<g transform="translate(0,{height - margin.bottom})">
+				{#each xScale.ticks(5) as tick (tick.getTime())}
+					<g transform="translate({xScale(tick)},0)">
+						<line y2="4" stroke="#777" />
+						<text y="16" text-anchor="middle" class="fill-surf-subtle text-[10px]"
+							>{formatHour(tick)}</text
+						>
+					</g>
+				{/each}
 			</g>
-		{/each}
 
-		<line
-			class="fill-none stroke-[#333] stroke-1"
-			x1={xScale(now)}
-			x2={xScale(now)}
-			y1="25"
-			y2={height - margin.bottom + 5}
-		/>
+			{#each highLowTides as tide (tide.parsedTime.getTime())}
+				<g>
+					<line
+						class="fill-none stroke-[#333] stroke-1 opacity-40"
+						x1={xScale(tide.parsedTime)}
+						x2={xScale(tide.parsedTime)}
+						y1={yScale(tide.height)}
+						y2={height - margin.bottom}
+					/>
+					<text
+						x={xScale(tide.parsedTime)}
+						y={yScale(tide.height) - 10}
+						text-anchor="middle"
+						class="fill-surf-muted text-[10px] font-semibold"
+					>
+						{tide.height}ft
+					</text>
+					<text
+						x={xScale(tide.parsedTime)}
+						y={yScale(tide.height) - 22}
+						text-anchor="middle"
+						class="fill-surf-muted text-[10px] font-bold"
+					>
+						{formatTime(tide.parsedTime)}
+					</text>
+				</g>
+			{/each}
+
+			<line
+				class="fill-none stroke-[#333] stroke-1"
+				x1={xScale(now)}
+				x2={xScale(now)}
+				y1="25"
+				y2={height - margin.bottom + 5}
+			/>
+		</g>
 	{/if}
 </svg>
