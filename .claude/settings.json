@@ -1,11 +1,16 @@
 {
-	"permissions": {
-		"allow": [
-			"Bash(ls -la \"/Users/tuckergordon/Desktop/Other Repos/surfcams\" && echo \"---OLD---\" && ls -la \"/Users/tuckergordon/Desktop/Other Repos/\" | grep -i surf)",
-			"Read(//Users/tuckergordon/Desktop/Other Repos/**)",
-			"mcp__svelte__list-sections",
-			"mcp__svelte__get-documentation",
-			"mcp__svelte__svelte-autofixer"
-		]
-	}
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"/Users/tuckergordon/Desktop/Other Repos/surfcams\" && echo \"---OLD---\" && ls -la \"/Users/tuckergordon/Desktop/Other Repos/\" | grep -i surf)",
+      "Read(//Users/tuckergordon/Desktop/Other Repos/**)",
+      "mcp__svelte__list-sections",
+      "mcp__svelte__get-documentation",
+      "mcp__svelte__svelte-autofixer",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/124.0.0.0 Safari/537.36\" -H \"Accept-Language: en-US,en;q=0.9\" \"https://www.youtube.com/channel/UCZ63kVFT7hf1K-Mx82MxFnQ/streams\")",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/124.0.0.0 Safari/537.36\" -H \"Accept-Language: en-US,en;q=0.9\" \"https://www.youtube.com/channel/UCZ63kVFT7hf1K-Mx82MxFnQ/streams\" -o /tmp/higgins.html)",
+      "Read(//tmp/**)",
+      "Bash(grep -oE '\"[a-zA-Z]+Renderer\"' /tmp/higgins.html | sort -u | head -40)",
+      "Read(//private/tmp/**)"
+    ]
+  }
 }

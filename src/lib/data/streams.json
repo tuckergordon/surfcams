@@ -3,30 +3,31 @@
 		"id": "higgins",
 		"name": "Higgins Beach",
 		"channelId": "UCZ63kVFT7hf1K-Mx82MxFnQ",
-		"videoId": "pMRy37KA2P4"
+		"titleMatch": "Higgins"
 	},
 	{
 		"id": "scarb",
 		"name": "Scarborough Beach",
 		"channelId": "UCzu3l_vz2bu2xn4bOo3eF_g",
-		"videoId": "1X6oqGKHSZs"
+		"titleMatch": "Scarborough"
 	},
 	{
 		"id": "oob",
 		"name": "Old Orchard Beach",
 		"channelId": "UCgKZLRv6-2iPbILfeOwrxAw",
-		"videoId": "HSQpqIWLViI"
+		"titleMatch": "Old Orchard"
 	},
 	{
 		"id": "pine-point",
 		"name": "Pine Point Beach",
 		"channelId": "UCqmAWyEj3X0WLSnrPv6E-uA",
-		"videoId": null
+		"titleMatch": "Pine Point"
 	},
 	{
 		"id": "kennebunk",
 		"name": "Kennebunk Beach",
 		"channelId": "UC8gbWbcNNyb5-NIXvFklkOA",
-		"videoId": "MnBqd6bB4Jw"
+		"titleMatch": "Kennebunk Beach",
+		"seedVideoId": "MnBqd6bB4Jw"
 	}
 ]
