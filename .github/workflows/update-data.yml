@@ -2,8 +2,8 @@ name: Update stream data
 
 on:
   schedule:
-    # Hourly — resolves current live videoIds and commits to the data branch.
-    - cron: '0 * * * *'
+    # Hourly at :17 — off-peak minute to avoid top-of-hour scheduler congestion.
+    - cron: '17 * * * *'
   workflow_dispatch:
 
 permissions:
