@@ -1,7 +1,20 @@
 <script lang="ts">
-	import * as d3 from 'd3';
+	import {
+		area,
+		curveMonotoneX,
+		extent,
+		line,
+		scaleLinear,
+		scaleTime,
+		timeFormat,
+		timeParse
+	} from 'd3';
 	import { onMount } from 'svelte';
 	import { fetchTides, type TideEntry } from './tides';
+
+	const parseTime = timeParse('%I:%M %p');
+	const formatTime = timeFormat('%I:%M %p');
+	const formatTickHour = timeFormat('%-I%p');
 
 	interface ParsedTide extends TideEntry {
 		parsedTime: Date;
@@ -22,53 +35,44 @@
 
 	const xScale = $derived.by(() => {
 		if (tideData.length === 0) return null;
-		return d3
-			.scaleTime()
-			.domain(d3.extent(tideData, (d) => d.parsedTime) as [Date, Date])
+		return scaleTime()
+			.domain(extent(tideData, (d) => d.parsedTime) as [Date, Date])
 			.range([margin.left, width - margin.right]);
 	});
 
 	const yScale = $derived.by(() => {
 		if (tideData.length === 0) return null;
-		const min = d3.min(tideData, (d) => d.height) ?? 0;
-		const max = d3.max(tideData, (d) => d.height) ?? 0;
-		return d3
-			.scaleLinear()
+		const [min = 0, max = 0] = extent(tideData, (d) => d.height);
+		return scaleLinear()
 			.domain([min - 1, max + 1])
 			.range([height - margin.bottom, margin.top]);
 	});
 
 	const linePath = $derived.by(() => {
 		if (!xScale || !yScale) return null;
-		return d3
-			.line<ParsedTide>()
+		return line<ParsedTide>()
 			.x((d) => xScale(d.parsedTime))
 			.y((d) => yScale(d.height))
-			.curve(d3.curveCatmullRom)(tideData);
+			.curve(curveMonotoneX)(tideData);
 	});
 
 	const areaPath = $derived.by(() => {
 		if (!xScale || !yScale) return null;
-		return d3
-			.area<ParsedTide>()
+		return area<ParsedTide>()
 			.x((d) => xScale(d.parsedTime))
 			.y0(height - margin.bottom)
 			.y1((d) => yScale(d.height))
-			.curve(d3.curveCatmullRom)(tideData);
+			.curve(curveMonotoneX)(tideData);
 	});
 
 	const highLowTides = $derived(tideData.filter((d) => d.type === 'high' || d.type === 'low'));
 
 	function formatHour(date: Date): string {
-		const formatted = d3.timeFormat('%-I%p')(date).toLowerCase();
+		const formatted = formatTickHour(date).toLowerCase();
 		return formatted === '12pm' ? 'Noon' : formatted;
 	}
 
-	const timeFormat = d3.timeFormat('%I:%M %p');
-
 	onMount(() => {
-		const parseTime = d3.timeParse('%I:%M %p');
-
 		fetchTides()
 			.then((data) => {
 				tideData = data
@@ -84,7 +88,7 @@
 
 		const interval = setInterval(() => {
 			now = new Date();
-		}, 1000);
+		}, 60_000);
 
 		return () => clearInterval(interval);
 	});
@@ -101,7 +105,7 @@
 		<path class="tide-area" d={areaPath} />
 		<path class="tide-line" d={linePath} />
 
-		<g transform="translate(0,{height - 20})">
+		<g transform="translate(0,{height - margin.bottom})">
 			{#each xScale.ticks(5) as tick (tick.getTime())}
 				<g transform="translate({xScale(tick)},0)">
 					<line y2="4" stroke="#777" />
@@ -117,7 +121,7 @@
 					x1={xScale(tide.parsedTime)}
 					x2={xScale(tide.parsedTime)}
 					y1={yScale(tide.height)}
-					y2={height - 20}
+					y2={height - margin.bottom}
 				/>
 				<text x={xScale(tide.parsedTime)} y={yScale(tide.height) - 10} text-anchor="middle">
 					{tide.height}ft
@@ -128,12 +132,18 @@
 					text-anchor="middle"
 					class="tide-time"
 				>
-					{timeFormat(tide.parsedTime)}
+					{formatTime(tide.parsedTime)}
 				</text>
 			</g>
 		{/each}
 
-		<line class="line-current" x1={xScale(now)} x2={xScale(now)} y1="25" y2={height - 15} />
+		<line
+			class="line-current"
+			x1={xScale(now)}
+			x2={xScale(now)}
+			y1="25"
+			y2={height - margin.bottom + 5}
+		/>
 	{/if}
 </svg>
 
