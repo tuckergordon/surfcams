@@ -7,12 +7,6 @@
 	} from './temperatures';
 	import { fetchCurrentWeather, weatherEmoji, type CurrentWeather } from './weather';
 
-	interface Props {
-		class?: string;
-	}
-
-	let { class: className = '' }: Props = $props();
-
 	let air = $state<TemperatureSummary | null>(null);
 	let water = $state<TemperatureSummary | null>(null);
 	let weather = $state<CurrentWeather | null>(null);
@@ -48,60 +42,29 @@
 	});
 </script>
 
-<div class={['temperatures', className]}>
-	<div class="temp-row">
-		<span class="icon" aria-label="Current weather">{weather ? weatherEmoji(weather) : ''}</span>
+<div class="flex shrink-0 flex-col gap-[5px] pb-5 text-[13px] leading-none text-[#424242]">
+	<div class="flex items-center gap-[7px] whitespace-nowrap">
+		<span
+			class="inline-flex w-[22px] -translate-y-[2px] items-center justify-center text-base leading-none"
+			aria-label="Current weather">{weather ? weatherEmoji(weather) : ''}</span
+		>
 		{#if air}
-			<span class="current">{fmt(air.current)}</span>
-			<span class="range">H {fmt(air.high)} / L {fmt(air.low)}</span>
+			<span class="font-bold text-surf-green">{fmt(air.current)}</span>
+			<span class="text-surf-subtle">H {fmt(air.high)} / L {fmt(air.low)}</span>
 		{:else}
-			<span class="range">—</span>
+			<span class="text-surf-subtle">—</span>
 		{/if}
 	</div>
-	<div class="temp-row">
-		<span class="icon" aria-label="Water">🌊</span>
+	<div class="flex items-center gap-[7px] whitespace-nowrap">
+		<span
+			class="inline-flex w-[22px] translate-y-[-2px] items-center justify-center text-base leading-none"
+			aria-label="Water">🌊</span
+		>
 		{#if water}
-			<span class="current">{fmt(water.current)}</span>
-			<span class="range">H {fmt(water.high)} / L {fmt(water.low)}</span>
+			<span class="font-bold text-surf-green">{fmt(water.current)}</span>
+			<span class="text-surf-subtle">H {fmt(water.high)} / L {fmt(water.low)}</span>
 		{:else}
-			<span class="range">—</span>
+			<span class="text-surf-subtle">—</span>
 		{/if}
 	</div>
 </div>
-
-<style>
-	.temperatures {
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		font-size: 13px;
-		color: #424242;
-		line-height: 1;
-	}
-
-	.temp-row {
-		display: flex;
-		align-items: center;
-		gap: 7px;
-		white-space: nowrap;
-	}
-
-	.icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 22px;
-		font-size: 16px;
-		line-height: 1;
-		transform: translateY(-2px);
-	}
-
-	.current {
-		font-weight: 700;
-		color: #26554a;
-	}
-
-	.range {
-		color: #777;
-	}
-</style>

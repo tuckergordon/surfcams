@@ -21,12 +21,11 @@
 	}
 
 	interface Props {
-		class?: string;
 		width?: number;
 		height?: number;
 	}
 
-	let { class: className = '', width = 350, height = 100 }: Props = $props();
+	let { width = 350, height = 100 }: Props = $props();
 
 	const margin = { top: 30, right: 25, bottom: 20, left: 25 };
 
@@ -95,42 +94,49 @@
 </script>
 
 <svg
-	class={['tide-chart', className]}
+	class="block h-auto max-w-full min-w-0 flex-1"
 	{width}
 	{height}
 	viewBox="0 0 {width} {height}"
 	aria-label="Tide chart for Portland, ME"
 >
 	{#if xScale && yScale && linePath && areaPath}
-		<path class="tide-area" d={areaPath} />
-		<path class="tide-line" d={linePath} />
+		<path class="fill-[#4682b4]/30" d={areaPath} />
+		<path class="fill-none stroke-black stroke-2" d={linePath} />
 
 		<g transform="translate(0,{height - margin.bottom})">
 			{#each xScale.ticks(5) as tick (tick.getTime())}
 				<g transform="translate({xScale(tick)},0)">
 					<line y2="4" stroke="#777" />
-					<text y="16" text-anchor="middle" class="tick">{formatHour(tick)}</text>
+					<text y="16" text-anchor="middle" class="fill-surf-subtle text-[10px]"
+						>{formatHour(tick)}</text
+					>
 				</g>
 			{/each}
 		</g>
 
 		{#each highLowTides as tide (tide.parsedTime.getTime())}
-			<g class="group-high-low">
+			<g>
 				<line
-					class="line-{tide.type}"
+					class="fill-none stroke-[#333] stroke-1 opacity-40"
 					x1={xScale(tide.parsedTime)}
 					x2={xScale(tide.parsedTime)}
 					y1={yScale(tide.height)}
 					y2={height - margin.bottom}
 				/>
-				<text x={xScale(tide.parsedTime)} y={yScale(tide.height) - 10} text-anchor="middle">
+				<text
+					x={xScale(tide.parsedTime)}
+					y={yScale(tide.height) - 10}
+					text-anchor="middle"
+					class="fill-surf-muted text-[10px] font-semibold"
+				>
 					{tide.height}ft
 				</text>
 				<text
 					x={xScale(tide.parsedTime)}
 					y={yScale(tide.height) - 22}
 					text-anchor="middle"
-					class="tide-time"
+					class="fill-surf-muted text-[10px] font-bold"
 				>
 					{formatTime(tide.parsedTime)}
 				</text>
@@ -138,7 +144,7 @@
 		{/each}
 
 		<line
-			class="line-current"
+			class="fill-none stroke-[#333] stroke-1"
 			x1={xScale(now)}
 			x2={xScale(now)}
 			y1="25"
@@ -146,47 +152,3 @@
 		/>
 	{/if}
 </svg>
-
-<style>
-	.tide-line {
-		stroke: black;
-		stroke-width: 2;
-		fill: none;
-	}
-
-	.tide-area {
-		fill: #4682b4;
-		fill-opacity: 0.3;
-	}
-
-	.group-high-low text {
-		text-anchor: middle;
-		font-size: 10px;
-		font-weight: 600;
-		line-height: 16px;
-		fill: #424242;
-	}
-
-	.tide-time {
-		font-weight: 700;
-	}
-
-	.line-high,
-	.line-low {
-		stroke: #333;
-		stroke-width: 1;
-		opacity: 0.4;
-		fill: none;
-	}
-
-	.line-current {
-		stroke: #333;
-		stroke-width: 1;
-		fill: none;
-	}
-
-	.tick {
-		fill: #777;
-		font-size: 10px;
-	}
-</style>

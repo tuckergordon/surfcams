@@ -33,9 +33,7 @@ async function fetchProduct(
 	const data = json.data;
 	if (!data || data.length === 0) return null;
 
-	const values = data
-		.map((d) => parseFloat(d.v))
-		.filter((v) => Number.isFinite(v));
+	const values = data.map((d) => parseFloat(d.v)).filter((v) => Number.isFinite(v));
 	if (values.length === 0) return null;
 
 	return {

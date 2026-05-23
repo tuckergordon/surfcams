@@ -28,7 +28,7 @@ const SYNODIC_MONTH_MS = 29.530588853 * 24 * 60 * 60 * 1000;
 export function moonPhaseEmoji(now: Date = new Date()): string {
 	const elapsed = now.getTime() - REFERENCE_NEW_MOON_MS;
 	const phase =
-		((((elapsed % SYNODIC_MONTH_MS) + SYNODIC_MONTH_MS) % SYNODIC_MONTH_MS) / SYNODIC_MONTH_MS);
+		(((elapsed % SYNODIC_MONTH_MS) + SYNODIC_MONTH_MS) % SYNODIC_MONTH_MS) / SYNODIC_MONTH_MS;
 	if (phase < 0.03 || phase >= 0.97) return '🌑';
 	if (phase < 0.22) return '🌒';
 	if (phase < 0.28) return '🌓';
