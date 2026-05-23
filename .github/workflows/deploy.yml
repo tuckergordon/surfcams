@@ -3,9 +3,6 @@ name: Build and deploy
 on:
   push:
     branches: [main]
-  schedule:
-    # Hourly — refreshes videoIds and redeploys
-    - cron: '0 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -27,7 +24,6 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      # `bun run build` runs the updater first via the package.json script.
       - run: bun run build
 
       - uses: actions/configure-pages@v5

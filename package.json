@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "bun run update-streams && vite build",
+		"build": "vite build",
 		"preview": "vite preview",
 		"update-streams": "bun run scripts/update-streams.ts",
 		"prepare": "svelte-kit sync || echo ''",

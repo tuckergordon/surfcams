@@ -10,17 +10,19 @@ Most of these cams are YouTube live streams run by other people. They go down, g
 
 ## How it stays up to date
 
-Each cam in [`src/lib/data/streams.json`](src/lib/data/streams.json) has a `channelId` and a `titleMatch` — config only, no live state. A GitHub Actions cron runs every hour and:
+Each cam in [`src/lib/data/streams.json`](src/lib/data/streams.json) has a `channelId` and a `titleMatch` — config only, no live state. Resolved videoIds live on a separate `data` branch (just `resolved-videos.json`, nothing else) that's updated independently of the deployed site.
+
+**The cron** ([`.github/workflows/update-data.yml`](.github/workflows/update-data.yml)) runs hourly:
 
 1. For each cam, checks whether the previously-resolved `videoId` is still actively broadcasting — if so, nothing to do.
 2. Otherwise, scrapes the channel's `/streams` page and picks the currently-live video whose title contains `titleMatch`.
-3. Writes resolved IDs to `src/lib/data/resolved-videos.json` (gitignored), rebuilds the site, and deploys to GitHub Pages.
+3. Commits the updated `resolved-videos.json` to the `data` branch.
 
-Because resolved IDs aren't committed, the repo stays free of churn — the build is the source of truth for what's currently live, not any file in git.
+**The deploy** ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) only runs on push to `main` — i.e. when actual code changes. It builds the static site and ships it to GitHub Pages.
 
-No API key, no quota, no server, no cost. The build is fully static.
+**The page** fetches `resolved-videos.json` from the `data` branch at load time and renders the iframes. This means hourly updates never touch the site bundle, the cron has a tiny failure surface (just a fetch + git commit), and the `data` branch's git log doubles as a chronological record of every cam swap.
 
-See [`scripts/update-streams.ts`](scripts/update-streams.ts) and [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+No API key, no quota, no server, no cost.
 
 ## Adding or changing a cam
 
@@ -40,22 +42,19 @@ Edit [`src/lib/data/streams.json`](src/lib/data/streams.json):
 - `titleMatch` should be specific enough to disambiguate when a channel has multiple concurrent live streams. Case-insensitive substring match.
 - `seedVideoId` is optional. YouTube's `/streams` page paginates, so on channels with dozens of concurrent broadcasts, the scrape may miss the right cam. If you know the current videoId, drop it here and the updater will use it to bootstrap its fast-path live check.
 
-Push to `main` and the workflow does the rest.
+Push to `main` and the deploy workflow rebuilds the site. The next hourly cron run will resolve the new cam's `videoId` and write it to the `data` branch.
 
 ## Local development
 
 ```sh
 bun install
+bun run update-streams   # writes static/resolved-videos.json (gitignored)
 bun run dev
 ```
 
-Runs the SvelteKit dev server with no base path (so URLs look like `/`, not `/surfcams/`). `dev` and `build` both invoke the updater first, so videoIds are always fresh.
+In dev, the page fetches `/resolved-videos.json` from `static/` instead of the live `data` branch — so you can test against fresh IDs without ever touching GitHub. The updater step only needs to be re-run when you want fresh data.
 
-To run just the updater:
-
-```sh
-bun run update-streams
-```
+If you skip `update-streams`, all cams render as offline (no file to fetch from).
 
 To preview a production build:
 

@@ -1,6 +1,6 @@
 import streamsJson from './streams.json' with { type: 'json' };
 
-export interface StreamConfig {
+export interface Stream {
 	id: string;
 	name: string;
 	channelId: string;
@@ -11,22 +11,15 @@ export interface StreamConfig {
 	seedVideoId?: string;
 }
 
-export interface Stream extends StreamConfig {
-	videoId: string | null;
-}
+export const streams: Stream[] = streamsJson;
 
-// Resolved videoIds are written by scripts/update-streams.ts and are gitignored.
-// Use import.meta.glob so a missing file doesn't break the build — cams just
-// render as offline until the updater runs.
-const resolvedModules = import.meta.glob<{ default: Record<string, string> }>(
-	'./resolved-videos.json',
-	{ eager: true }
-);
-const resolved = Object.values(resolvedModules)[0]?.default ?? {};
-
-const config: StreamConfig[] = streamsJson;
-
-export const streams: Stream[] = config.map((s) => ({
-	...s,
-	videoId: resolved[s.id] ?? null
-}));
+// Resolved videoIds live on the `data` branch and are refreshed hourly by
+// .github/workflows/update-data.yml. Fetched at runtime so updates don't
+// require a rebuild.
+//
+// In dev, fetch the local copy at /resolved-videos.json (written by
+// `bun run update-streams` into static/). In production, fetch from the
+// data branch on GitHub.
+export const RESOLVED_URL = import.meta.env.DEV
+	? '/resolved-videos.json'
+	: 'https://raw.githubusercontent.com/tuckergordon/surfcams/data/resolved-videos.json';

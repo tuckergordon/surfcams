@@ -1,7 +1,20 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import CamCard from '$lib/components/CamCard.svelte';
 	import TideChart from '$lib/components/tide-chart/TideChart.svelte';
-	import { streams } from '$lib/data/streams';
+	import { streams, RESOLVED_URL } from '$lib/data/streams';
+
+	let resolved = $state<Record<string, string> | null>(null);
+	let loading = $derived(resolved === null);
+
+	onMount(async () => {
+		try {
+			const res = await fetch(RESOLVED_URL, { cache: 'no-cache' });
+			resolved = res.ok ? await res.json() : {};
+		} catch {
+			resolved = {};
+		}
+	});
 </script>
 
 <svelte:head>
@@ -15,7 +28,7 @@
 
 <main class="cam-grid">
 	{#each streams as stream (stream.id)}
-		<CamCard {stream} />
+		<CamCard {stream} videoId={resolved?.[stream.id] ?? null} {loading} />
 	{/each}
 </main>
 

@@ -29,9 +29,11 @@ interface LiveVideo {
 	title: string;
 }
 
-const DATA_DIR = join(import.meta.dir, '..', 'src', 'lib', 'data');
-const CONFIG_PATH = join(DATA_DIR, 'streams.json');
-const RESOLVED_PATH = join(DATA_DIR, 'resolved-videos.json');
+const ROOT = join(import.meta.dir, '..');
+const CONFIG_PATH = join(ROOT, 'src', 'lib', 'data', 'streams.json');
+// Written into static/ so `bun run dev` can fetch it locally — the CI workflow
+// then picks it up from the same path before publishing to the data branch.
+const RESOLVED_PATH = join(ROOT, 'static', 'resolved-videos.json');
 
 const UA =
 	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';

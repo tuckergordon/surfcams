@@ -1,0 +1,58 @@
+name: Update stream data
+
+on:
+  schedule:
+    # Hourly — resolves current live videoIds and commits to the data branch.
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      - name: Resolve current videoIds
+        run: bun run update-streams
+
+      - name: Commit to data branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cp static/resolved-videos.json "$RUNNER_TEMP/resolved-videos.json"
+
+          mkdir "$RUNNER_TEMP/data-branch"
+          cd "$RUNNER_TEMP/data-branch"
+          git init -b data
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          # Reset working tree to existing data branch if it exists; otherwise
+          # the orphan init above leaves us with an empty tree to commit into.
+          if git fetch --depth 1 origin data 2>/dev/null; then
+            git reset --hard origin/data
+          fi
+
+          cp "$RUNNER_TEMP/resolved-videos.json" resolved-videos.json
+          git add resolved-videos.json
+
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Update resolved videoIds"
+          git push origin data

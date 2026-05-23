@@ -1,10 +1,14 @@
 <script lang="ts">
 	import type { Stream } from '$lib/data/streams';
 
-	let { stream }: { stream: Stream } = $props();
+	let {
+		stream,
+		videoId,
+		loading
+	}: { stream: Stream; videoId: string | null; loading: boolean } = $props();
 
 	const embedSrc = $derived(
-		stream.videoId ? `https://www.youtube.com/embed/${stream.videoId}?autoplay=1&mute=1` : null
+		videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1` : null
 	);
 </script>
 
@@ -18,8 +22,12 @@
 			referrerpolicy="strict-origin-when-cross-origin"
 			loading="lazy"
 		></iframe>
+	{:else if loading}
+		<div class="placeholder loading" role="status">
+			<p>Loading…</p>
+		</div>
 	{:else}
-		<div class="offline" role="status">
+		<div class="placeholder offline" role="status">
 			<p>Stream offline</p>
 		</div>
 	{/if}
@@ -38,7 +46,7 @@
 		display: block;
 	}
 
-	.offline {
+	.placeholder {
 		width: 100%;
 		aspect-ratio: 16 / 9;
 		display: flex;
