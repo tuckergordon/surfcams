@@ -2,8 +2,12 @@ name: Update stream data
 
 on:
   schedule:
-    # Hourly at :17 — off-peak minute to avoid top-of-hour scheduler congestion.
-    - cron: '17 * * * *'
+    # Runs at 5:10 AM, 8:15 AM, 12:20 PM, 3:25 PM, and 6:30 PM off-peak times
+    - cron: '10 5 * * *'
+    - cron: '15 8 * * *'
+    - cron: '20 12 * * *'
+    - cron: '25 15 * * *'
+    - cron: '30 18 * * *'
   workflow_dispatch:
 
 permissions:
