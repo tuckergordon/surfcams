@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import CamCard from '$lib/components/CamCard.svelte';
 	import TideChart from '$lib/components/tide-chart/TideChart.svelte';
+	import Temperatures from '$lib/components/temperatures/Temperatures.svelte';
 	import { streams, RESOLVED_URL } from '$lib/data/streams';
 
 	let resolved = $state<Record<string, string> | null>(null);
@@ -23,7 +24,10 @@
 
 <header>
 	<h1>Maine Surf Cams</h1>
-	<TideChart class="tide-chart" width={350} height={100} />
+	<div class="tide-temps">
+		<Temperatures class="header-temps" />
+		<TideChart class="tide-chart" width={350} height={100} />
+	</div>
 </header>
 
 <main class="cam-grid">

@@ -22,10 +22,29 @@ header {
 	flex-direction: column;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
 	header {
 		flex-direction: row;
 	}
+}
+
+.tide-temps {
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+	width: 100%;
+	max-width: 470px;
+}
+
+@media (max-width: 899px) {
+	.tide-temps {
+		margin: 0 auto;
+	}
+}
+
+.header-temps {
+	padding-bottom: 20px;
+	flex-shrink: 0;
 }
 
 .tide-chart {
@@ -35,6 +54,10 @@ header {
 @media (min-width: 375px) {
 	.tide-chart {
 		display: block;
+		min-width: 0;
+		max-width: 100%;
+		height: auto;
+		flex: 1;
 	}
 }
 
