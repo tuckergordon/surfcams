@@ -21,11 +21,29 @@ export async function fetchCurrentWeather(): Promise<CurrentWeather | null> {
 	return { code: current.weather_code, isDay: current.is_day === 1 };
 }
 
+// Reference new moon: 2000-01-06 18:14 UTC (Julian date 2451550.1).
+const REFERENCE_NEW_MOON_MS = Date.UTC(2000, 0, 6, 18, 14);
+const SYNODIC_MONTH_MS = 29.530588853 * 24 * 60 * 60 * 1000;
+
+export function moonPhaseEmoji(now: Date = new Date()): string {
+	const elapsed = now.getTime() - REFERENCE_NEW_MOON_MS;
+	const phase =
+		((((elapsed % SYNODIC_MONTH_MS) + SYNODIC_MONTH_MS) % SYNODIC_MONTH_MS) / SYNODIC_MONTH_MS);
+	if (phase < 0.03 || phase >= 0.97) return '🌑';
+	if (phase < 0.22) return '🌒';
+	if (phase < 0.28) return '🌓';
+	if (phase < 0.47) return '🌔';
+	if (phase < 0.53) return '🌕';
+	if (phase < 0.72) return '🌖';
+	if (phase < 0.78) return '🌗';
+	return '🌘';
+}
+
 // WMO weather codes → emoji.
 // https://open-meteo.com/en/docs#weathervariables
 export function weatherEmoji({ code, isDay }: CurrentWeather): string {
-	if (code === 0) return isDay ? '☀️' : '🌙';
-	if (code === 1) return isDay ? '🌤️' : '🌙';
+	if (code === 0) return isDay ? '☀️' : moonPhaseEmoji();
+	if (code === 1) return isDay ? '🌤️' : moonPhaseEmoji();
 	if (code === 2) return isDay ? '⛅' : '☁️';
 	if (code === 3) return '☁️';
 	if (code === 45 || code === 48) return '🌫️';
